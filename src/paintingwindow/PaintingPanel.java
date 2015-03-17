@@ -18,22 +18,15 @@ public class PaintingPanel extends JPanel implements MouseListener {
     PaintBrush brush = new PaintBrush();
 
     public PaintingPanel() {
-        setSize(900, 900); //set size to 900x900 pixels
+
+        Logger.logCodeMessage("Setting size of window to 900x1000");
+        setSize(900, 1000); //set size to 900x1000 pixels
 
 
         //load all images, such as brush size chooser, and other icons
         try {
-//            catMoving = ImageIO.read(new File("resource/Cat_Moving.png"));
-//            catTrapped = ImageIO.read(new File("resource/Cat_Trapped.png"));
-//            cheese = ImageIO.read(new File("resource/Cheese.png"));
-//            dirt = ImageIO.read(new File("resource/Dirt.png"));
-//            holeMouse = ImageIO.read(new File("resource/Hole With Mouse.png"));
-//            hole = ImageIO.read(new File("resource/Hole.png"));
-//            movingMouse = ImageIO.read(new File("resource/Mouse_Moving.png"));
-//            moveWall = ImageIO.read(new File("resource/Movable_Wall.png"));
-//            trap = ImageIO.read(new File("resource/Trap.png"));
-//            wall = ImageIO.read(new File("resource/Wall.png"));
-//            yarn = ImageIO.read(new File("resource/Yarn.png"));
+            //catMoving = ImageIO.read(new File("resource/Cat_Moving.png"));
+
             Logger.logOtherMessage("ImageLoader", "Succeeded.");
 
         } catch (Exception e) {
@@ -42,10 +35,17 @@ public class PaintingPanel extends JPanel implements MouseListener {
             System.exit(-2);
         }
         addMouseListener(this);
+        addNotify();
     }
 
 
     public void paint(Graphics g) {
+        //todo paint gui
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, getWidth(), 150);
+
+        g.setColor(Color.BLACK);
+        g.drawString("Painter Program", 10, 10);
 
     }
 
@@ -73,5 +73,11 @@ public class PaintingPanel extends JPanel implements MouseListener {
     @Deprecated
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        requestFocus();
     }
 }

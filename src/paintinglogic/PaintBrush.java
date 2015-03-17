@@ -1,6 +1,4 @@
-package paintinglogic;/**
- * Created by K1211282 on 3/17/2015.
- */
+package paintinglogic;
 
 /**
  * @author K1211282
@@ -43,4 +41,5 @@ public class PaintBrush {
     public void setShape(int shape) {
         this.shape = shape;
     }
+
 }
