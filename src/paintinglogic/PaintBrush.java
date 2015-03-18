@@ -9,7 +9,7 @@ package paintinglogic;
 public class PaintBrush {
 
     public static final int SMALL = 1, MEDIUM = 2, BIG = 3, HUGE = 4; //sizes
-    public static final int CIRCLE = 1, SQUARE = 2;
+    public static final int CIRCLE = 1, SQUARE = 2, FILL = 3; //shapes
     boolean down;
     int size, shape;
 
