@@ -16,6 +16,7 @@ public class PaintBrush {
     public PaintBrush() {
         down = false;
         size = 1;
+        shape = CIRCLE;
     }
 
     public boolean isDown() {
