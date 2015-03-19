@@ -2,7 +2,8 @@
 A painting program written in java.
 
 #Running
-You can directly execute the jar, or do one of the below methods.
+You can directly execute the jar, or do one of the below methods. Also ensure you have at least Java 7 installed.
+
 ###Running in Windows:
 Included in the release is a .bat file. Running that bat file will run the jar, executing the program. 
 
