@@ -64,17 +64,38 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         //draw all brush choices to the screen
         g.drawString("Brushes:", 150, 20);
         g.drawImage(paintbucket, 150, 30, null);
+        g.drawString("Clear all:", 10, 50);
         g.drawImage(xMark, 10, 60, null);
         g.drawImage(circle, 215, 30, null);
         g.drawImage(square, 279, 30, null);
 
         //draw size choices
-
         g.drawImage(small, 150, 85, null);
         g.drawImage(medium, 200, 85, null);
         g.drawImage(big, 250, 85, null);
         g.drawImage(huge, 320, 85, null);
         g.drawString("Sizes:", 150, 100);
+
+        //draw colour choices
+        g.drawString("Colours:", 500, 30);
+        g.setColor(Color.RED);
+        g.fillRect(500, 40, 10, 10);
+        g.setColor(Color.BLUE);
+        g.fillRect(515, 40, 10, 10);
+        g.setColor(Color.orange);
+        g.fillRect(530, 40, 10, 10);
+        g.setColor(Color.yellow);
+        g.fillRect(545, 40, 10, 10);
+        g.setColor(Color.green);
+        g.fillRect(560, 40, 10, 10);
+        g.setColor(Color.black);
+        g.fillRect(575, 40, 10, 10);
+        g.setColor(Color.CYAN);
+        g.fillRect(590, 40, 10, 10);
+        g.setColor(Color.PINK);
+        g.fillRect(605, 40, 10, 10);
+        g.setColor(Color.MAGENTA);
+        g.fillRect(620, 40, 10, 10);
 
         //drawing ----------------------
         g.setColor(Color.BLACK); //todo temp placeholder, add colours
@@ -84,45 +105,46 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
                 switch (brush.getSize()) {
                     case PaintBrush.SMALL:
                         g.fillOval(dynamicMouseX, dynamicMouseY, 10, 10);
-                        repaint();
+
                         break;
                     case PaintBrush.MEDIUM:
                         g.fillOval(dynamicMouseX, dynamicMouseY, 50, 50);
-                        repaint();
+
                         break;
                     case PaintBrush.BIG:
                         g.fillOval(dynamicMouseX, dynamicMouseY, 90, 90);
-                        repaint();
+
                         break;
                     case PaintBrush.HUGE:
                         g.fillOval(dynamicMouseX, dynamicMouseY, 130, 130);
-                        repaint();
+
                         break;
                 }
-                repaint();
+
             } else if (brush.getShape() == PaintBrush.SQUARE) {
                 switch (brush.getSize()) {
                     case PaintBrush.SMALL:
                         g.fillRect(dynamicMouseX, dynamicMouseY, 10, 10);
-                        repaint();
+
                         break;
                     case PaintBrush.MEDIUM:
                         g.fillRect(dynamicMouseX, dynamicMouseY, 50, 50);
-                        repaint();
+
                         break;
                     case PaintBrush.BIG:
                         g.fillRect(dynamicMouseX, dynamicMouseY, 90, 90);
-                        repaint();
+
                         break;
                     case PaintBrush.HUGE:
                         g.fillRect(dynamicMouseX, dynamicMouseY, 130, 130);
-                        repaint();
+
                         break;
                 }
-                repaint();
+
             } else if (brush.getShape() == PaintBrush.FILL) {
                 //todo fill recursive method >help
-                repaint();
+                fillWithColour(g, g.getColor(), dynamicMouseX, dynamicMouseY);
+
             }
         }
 
@@ -139,7 +161,34 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         brush.setDown(true);
         dynamicMouseX = e.getX();
         dynamicMouseY = e.getY();
-        //System.out.println("User pressed mouse at "+e.getX()+","+e.getY());
+
+        //Shapes---------------------------
+        if ((dynamicMouseX >= 150 && dynamicMouseX <= 150 + 64) && (dynamicMouseY >= 30 && dynamicMouseY <= 30 + 64)) {
+            brush.setShape(PaintBrush.FILL);
+            Logger.logCodeMessage("Set brush shape to FILL.");
+        } else if ((dynamicMouseX >= 215 && dynamicMouseX <= 215 + 64) && (dynamicMouseY >= 30 && dynamicMouseY <= 30 + 64)) {
+            brush.setShape(PaintBrush.CIRCLE);
+            Logger.logCodeMessage("Set brush shape to CIRCLE.");
+        } else if ((dynamicMouseX >= 279 && dynamicMouseX <= 279 + 64) && (dynamicMouseY >= 30 && dynamicMouseY <= 30 + 64)) {
+            brush.setShape(PaintBrush.SQUARE);
+            Logger.logCodeMessage("Set brush shape to SQUARE.");
+        }
+        //Sizes-----------------------
+        if ((dynamicMouseX >= 150 && dynamicMouseX <= 150 + 64) && (dynamicMouseY >= 85 && dynamicMouseY <= 85 + 64)) {
+            brush.setSize(PaintBrush.SMALL);
+            Logger.logCodeMessage("Set brush SIZE to SMALL.");
+        } else if ((dynamicMouseX >= 200 && dynamicMouseX <= 200 + 64) && (dynamicMouseY >= 85 && dynamicMouseY <= 85 + 64)) {
+            brush.setSize(PaintBrush.MEDIUM);
+            Logger.logCodeMessage("Set brush size to MEDIUM.");
+        } else if ((dynamicMouseX >= 250 && dynamicMouseX <= 250 + 64) && (dynamicMouseY >= 85 && dynamicMouseY <= 85 + 64)) {
+            brush.setSize(PaintBrush.BIG);
+            Logger.logCodeMessage("Set brush size to BIG.");
+        } else if ((dynamicMouseX >= 320 && dynamicMouseX <= 320 + 64) && (dynamicMouseY >= 85 && dynamicMouseY <= 85 + 64)) {
+            brush.setSize(PaintBrush.HUGE);
+            Logger.logCodeMessage("Set brush size to HUGE");
+        }
+        //Colours ---------------------------
+        setCurrentPaint(brush, getGraphics());
     }
 
     @Override
@@ -163,6 +212,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
     public void addNotify() {
         super.addNotify();
         requestFocus();
+        Logger.logOtherMessage("Window", "Requesting focus on the window.");
     }
 
     @Override
@@ -183,7 +233,17 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
      * @param g     the graphics from paint
      * @param color the colour to fill with
      */
-    private void fillWithColour(Graphics g, Color color) {
+    private void fillWithColour(Graphics g, Color color, int startX, int startY) {
         //todo recursive colour filling method
+    }
+
+    /**
+     * Method to set the current painting colour
+     *
+     * @param brush the brush from the panel
+     * @param g     the graphics instance
+     */
+    private void setCurrentPaint(PaintBrush brush, Graphics g) {
+        //todo set current colour
     }
 }
