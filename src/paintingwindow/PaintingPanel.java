@@ -98,56 +98,44 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         g.fillRect(620, 40, 10, 10);
 
         //drawing ----------------------
-        g.setColor(Color.BLACK); //todo temp placeholder, add colours
+        g.setColor(brush.getColor());
         if (brush.isDown() && dynamicMouseY > 150) //if mouse is down in the painting area
         {
             if (brush.getShape() == PaintBrush.CIRCLE) {
                 switch (brush.getSize()) {
                     case PaintBrush.SMALL:
                         g.fillOval(dynamicMouseX, dynamicMouseY, 10, 10);
-
                         break;
                     case PaintBrush.MEDIUM:
                         g.fillOval(dynamicMouseX, dynamicMouseY, 50, 50);
-
                         break;
                     case PaintBrush.BIG:
                         g.fillOval(dynamicMouseX, dynamicMouseY, 90, 90);
-
                         break;
                     case PaintBrush.HUGE:
                         g.fillOval(dynamicMouseX, dynamicMouseY, 130, 130);
-
                         break;
                 }
-
             } else if (brush.getShape() == PaintBrush.SQUARE) {
                 switch (brush.getSize()) {
                     case PaintBrush.SMALL:
                         g.fillRect(dynamicMouseX, dynamicMouseY, 10, 10);
-
                         break;
                     case PaintBrush.MEDIUM:
                         g.fillRect(dynamicMouseX, dynamicMouseY, 50, 50);
-
                         break;
                     case PaintBrush.BIG:
                         g.fillRect(dynamicMouseX, dynamicMouseY, 90, 90);
-
                         break;
                     case PaintBrush.HUGE:
                         g.fillRect(dynamicMouseX, dynamicMouseY, 130, 130);
-
                         break;
                 }
-
             } else if (brush.getShape() == PaintBrush.FILL) {
                 //todo fill recursive method >help
                 fillWithColour(g, g.getColor(), dynamicMouseX, dynamicMouseY);
-
             }
         }
-
     }
 
 
@@ -165,30 +153,30 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         //Shapes---------------------------
         if ((dynamicMouseX >= 150 && dynamicMouseX <= 150 + 64) && (dynamicMouseY >= 30 && dynamicMouseY <= 30 + 64)) {
             brush.setShape(PaintBrush.FILL);
-            Logger.logCodeMessage("Set brush shape to FILL.");
+            Logger.logUserMessage("Set brush shape to FILL.");
         } else if ((dynamicMouseX >= 215 && dynamicMouseX <= 215 + 64) && (dynamicMouseY >= 30 && dynamicMouseY <= 30 + 64)) {
             brush.setShape(PaintBrush.CIRCLE);
-            Logger.logCodeMessage("Set brush shape to CIRCLE.");
+            Logger.logUserMessage("Set brush shape to CIRCLE.");
         } else if ((dynamicMouseX >= 279 && dynamicMouseX <= 279 + 64) && (dynamicMouseY >= 30 && dynamicMouseY <= 30 + 64)) {
             brush.setShape(PaintBrush.SQUARE);
-            Logger.logCodeMessage("Set brush shape to SQUARE.");
+            Logger.logUserMessage("Set brush shape to SQUARE.");
         }
         //Sizes-----------------------
         if ((dynamicMouseX >= 150 && dynamicMouseX <= 150 + 64) && (dynamicMouseY >= 85 && dynamicMouseY <= 85 + 64)) {
             brush.setSize(PaintBrush.SMALL);
-            Logger.logCodeMessage("Set brush SIZE to SMALL.");
+            Logger.logUserMessage("Set brush SIZE to SMALL.");
         } else if ((dynamicMouseX >= 200 && dynamicMouseX <= 200 + 64) && (dynamicMouseY >= 85 && dynamicMouseY <= 85 + 64)) {
             brush.setSize(PaintBrush.MEDIUM);
-            Logger.logCodeMessage("Set brush size to MEDIUM.");
+            Logger.logUserMessage("Set brush size to MEDIUM.");
         } else if ((dynamicMouseX >= 250 && dynamicMouseX <= 250 + 64) && (dynamicMouseY >= 85 && dynamicMouseY <= 85 + 64)) {
             brush.setSize(PaintBrush.BIG);
-            Logger.logCodeMessage("Set brush size to BIG.");
+            Logger.logUserMessage("Set brush size to BIG.");
         } else if ((dynamicMouseX >= 320 && dynamicMouseX <= 320 + 64) && (dynamicMouseY >= 85 && dynamicMouseY <= 85 + 64)) {
             brush.setSize(PaintBrush.HUGE);
-            Logger.logCodeMessage("Set brush size to HUGE");
+            Logger.logUserMessage("Set brush size to HUGE");
         }
         //Colours ---------------------------
-        setCurrentPaint(brush, getGraphics());
+        setCurrentPaint(brush);
     }
 
     @Override
@@ -241,9 +229,35 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
      * Method to set the current painting colour
      *
      * @param brush the brush from the panel
-     * @param g     the graphics instance
      */
-    private void setCurrentPaint(PaintBrush brush, Graphics g) {
-        //todo set current colour
+    private void setCurrentPaint(PaintBrush brush) {
+        if ((dynamicMouseX >= 500 && dynamicMouseX <= 510) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+            brush.setColor(Color.RED);
+            Logger.logUserMessage("Set the colour of the brush to RED.");
+        } else if ((dynamicMouseX >= 515 && dynamicMouseX <= 525) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+            brush.setColor(Color.BLUE);
+            Logger.logUserMessage("Set the colour of the brush to BLUE.");
+        } else if ((dynamicMouseX >= 530 && dynamicMouseX <= 540) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+            brush.setColor(Color.orange);
+            Logger.logUserMessage("Set the colour of the brush to ORANGE.");
+        } else if ((dynamicMouseX >= 545 && dynamicMouseX <= 555) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+            brush.setColor(Color.yellow);
+            Logger.logUserMessage("Set the colour of the brush to YELLOW.");
+        } else if ((dynamicMouseX >= 560 && dynamicMouseX <= 570) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+            brush.setColor(Color.green);
+            Logger.logUserMessage("Set the colour of the brush to GREEN.");
+        } else if ((dynamicMouseX >= 575 && dynamicMouseX <= 585) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+            brush.setColor(Color.black);
+            Logger.logUserMessage("Set the colour of the brush to BLACK.");
+        } else if ((dynamicMouseX >= 590 && dynamicMouseX <= 600) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+            brush.setColor(Color.CYAN);
+            Logger.logUserMessage("Set the colour of the brush to CYAN.");
+        } else if ((dynamicMouseX >= 605 && dynamicMouseX <= 615) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+            brush.setColor(Color.pink);
+            Logger.logUserMessage("Set the colour of the brush to PINK.");
+        } else if ((dynamicMouseX >= 620 && dynamicMouseX <= 630) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+            brush.setColor(Color.MAGENTA);
+            Logger.logUserMessage("Set the colour of the brush to MAGENTA.");
+        }
     }
 }

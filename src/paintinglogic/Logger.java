@@ -8,7 +8,6 @@ import java.io.FileWriter;
  * should theoretically work, with a few tweaks here and there.
  *
  * @author Noah Morton
- *
  */
 
 public class Logger {
@@ -18,7 +17,6 @@ public class Logger {
         f = new File("programLog.log"); //todo check if it is in the right dir
 
     }
-
 
     //logs a code message, such as a creation success.
     public static void logCodeMessage(String message) {
