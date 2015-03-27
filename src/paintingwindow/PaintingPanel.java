@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 /**
@@ -20,6 +21,7 @@ import java.io.File;
 public class PaintingPanel extends JPanel implements MouseMotionListener, MouseListener {
     PaintBrush brush = new PaintBrush();
     Image circle, paintbucket, square, xMark, small, medium, big, huge;
+    BufferedImage canvas;
     int dynamicMouseX = 0, dynamicMouseY = 0;
 
     public PaintingPanel() {
@@ -38,7 +40,11 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             medium = ImageIO.read(new File("resource/medium.png"));
             big = ImageIO.read(new File("resource/big.png"));
             huge = ImageIO.read(new File("resource/hug.png"));
-
+            canvas = new BufferedImage(900, 850, BufferedImage.TYPE_INT_ARGB);
+            /*canvas.getGraphics().setColor(Color.WHITE);
+            canvas.getGraphics().fillRect(0, 0, 900, 850);
+            canvas.getGraphics().setColor(Color.RED);
+            canvas.getGraphics().fillOval(200, 200, 200, 200);*/
             Logger.logOtherMessage("ImageLoader", "Succeeded.");
         } catch (Exception e) {
             System.err.println("Error Reading images. Program will exit.");
@@ -97,51 +103,14 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         g.setColor(Color.MAGENTA);
         g.fillRect(620, 40, 10, 10);
 
-        //drawing ----------------------
-        g.setColor(brush.getColor());
-        if (brush.isDown() && dynamicMouseY > 150) //if mouse is down in the painting area
-        {
-            if (brush.getShape() == PaintBrush.CIRCLE) {
-                switch (brush.getSize()) {
-                    case PaintBrush.SMALL:
-                        g.fillOval(dynamicMouseX, dynamicMouseY, 10, 10);
-                        break;
-                    case PaintBrush.MEDIUM:
-                        g.fillOval(dynamicMouseX, dynamicMouseY, 50, 50);
-                        break;
-                    case PaintBrush.BIG:
-                        g.fillOval(dynamicMouseX, dynamicMouseY, 90, 90);
-                        break;
-                    case PaintBrush.HUGE:
-                        g.fillOval(dynamicMouseX, dynamicMouseY, 130, 130);
-                        break;
-                }
-            } else if (brush.getShape() == PaintBrush.SQUARE) {
-                switch (brush.getSize()) {
-                    case PaintBrush.SMALL:
-                        g.fillRect(dynamicMouseX, dynamicMouseY, 10, 10);
-                        break;
-                    case PaintBrush.MEDIUM:
-                        g.fillRect(dynamicMouseX, dynamicMouseY, 50, 50);
-                        break;
-                    case PaintBrush.BIG:
-                        g.fillRect(dynamicMouseX, dynamicMouseY, 90, 90);
-                        break;
-                    case PaintBrush.HUGE:
-                        g.fillRect(dynamicMouseX, dynamicMouseY, 130, 130);
-                        break;
-                }
-            } else if (brush.getShape() == PaintBrush.FILL) {
-                //todo fill recursive method >help
-                fillWithColour(g, g.getColor(), dynamicMouseX, dynamicMouseY);
-            }
-        }
+        g.drawImage(canvas, 0, 150, null);
+
     }
+
 
 
     @Deprecated
     public void mouseClicked(MouseEvent e) {
-
     }
 
     @Override
@@ -205,9 +174,40 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        dynamicMouseX = e.getX(); //rapidly updates the location of the mouse.
-        dynamicMouseY = e.getY();
-        //System.out.println("Mouse Loc:"+e.getX()+","+e.getY());
+        canvas.getGraphics().setColor(Color.BLACK);
+        canvas.getGraphics().fillOval(200, 200, 200, 200);
+        /*if (brush.getShape() == PaintBrush.CIRCLE) {
+            switch (brush.getSize()) {
+                case PaintBrush.SMALL:
+                    canvas.getGraphics().fillOval(e.getX(), e.getY(), 10, 10);
+                    break;
+                case PaintBrush.MEDIUM:
+                    canvas.getGraphics().fillOval(e.getX(), e.getY(), 50, 50);
+                    break;
+                case PaintBrush.BIG:
+                    canvas.getGraphics().fillOval(e.getX(), e.getY(), 90, 90);
+                    break;
+                case PaintBrush.HUGE:
+                    canvas.getGraphics().fillOval(e.getX(), e.getY(), 130, 130);
+                    break;
+            }
+        } else if (brush.getShape() == PaintBrush.SQUARE) {
+            switch (brush.getSize()) {
+                case PaintBrush.SMALL:
+                    canvas.getGraphics().fillRect(e.getX(), e.getY(), 10, 10);
+                    break;
+                case PaintBrush.MEDIUM:
+                    canvas.getGraphics().fillRect(e.getX(), e.getY(), 50, 50);
+                    break;
+                case PaintBrush.BIG:
+                    canvas.getGraphics().fillRect(e.getX(), e.getY(), 90, 90);
+                    break;
+                case PaintBrush.HUGE:
+                    canvas.getGraphics().fillRect(e.getX(), e.getY(), 130, 130);
+                    break;
+            }
+        }*/
+        repaint();
     }
 
     @Deprecated
