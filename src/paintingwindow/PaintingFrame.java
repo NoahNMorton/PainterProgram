@@ -15,12 +15,9 @@ public class PaintingFrame extends JFrame {
 
     public PaintingFrame() {
 
-
         super("Rodent's Revenge");
-
         // Sets the close button to exit the program
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
         // makes the window not able to be resized
         setResizable(false);
         // creates the window
@@ -44,10 +41,6 @@ public class PaintingFrame extends JFrame {
         pack();
         // shows the frame
         setVisible(true);
-
-
         Logger.logOtherMessage("Window", "Window Created.");
-
     }
-
 }

@@ -20,6 +20,7 @@ public class PaintBrush {
         down = false;
         size = 1;
         shape = CIRCLE;
+        Logger.logCodeMessage("Setting brush to be the default loadout.");
     }
 
     public Color getColor() {
