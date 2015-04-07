@@ -1,11 +1,10 @@
 # PainterProgram
 A painting program written in java.
 
-#Running
-You can directly execute the jar, or do one of the below methods. Also ensure you have at least Java 7 installed.
+##How to use:
+The GUI along the top of the window is where you can select your brush, brush size, colour, and clear what you have from the canvas.
 
-###Running in Windows:
-Included in the release is a .bat file. Running that bat file will run the jar, executing the program. 
 
-###Running in Linux
-Included in the release is a .sh file. Running that script file will run the jar, executing the program.
+*What's included in the release:*
+
+Included in the release is the jar for running the program, a resource folder containing the icon pictures, a copy of the license, and this readme file.

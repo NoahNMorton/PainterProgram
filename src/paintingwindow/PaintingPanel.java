@@ -37,11 +37,9 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             medium = ImageIO.read(new File("resource/medium.png"));
             big = ImageIO.read(new File("resource/big.png"));
             huge = ImageIO.read(new File("resource/hug.png"));
-            canvas = new BufferedImage(900, 850, BufferedImage.TYPE_INT_ARGB);
-            /*canvas.getGraphics().setColor(Color.WHITE);
-            canvas.getGraphics().fillRect(0, 0, 900, 850);
-            canvas.getGraphics().setColor(Color.RED);
-            canvas.getGraphics().fillOval(200, 200, 200, 200);*/
+            canvas = new BufferedImage(900, 850, BufferedImage.TYPE_3BYTE_BGR); //creates the canvas to paint to.
+            //canvas.getGraphics().setColor(Color.RED);
+            //canvas.getGraphics().fillRect(0,0,900,850);
             Logger.logOtherMessage("ImageLoader", "Succeeded.");
         } catch (Exception e) {
             System.err.println("Error Reading images. Program will exit.");
@@ -55,13 +53,12 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
 
 
     public void paint(Graphics g) {
-        //System.out.println(dynamicMouseX);
-
         //paint gui ----------------------
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, getWidth(), 150);
         g.setColor(Color.BLACK);
         g.drawString("Painter Program", 10, 20);
+
         //draw all brush choices to the screen
         g.drawString("Brushes:", 150, 20);
         g.drawImage(paintbucket, 150, 30, null);
@@ -70,13 +67,14 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         g.drawImage(circle, 215, 30, null);
         g.drawImage(square, 279, 30, null);
 
-        //draw size choices
+        //draw size choices -------------
         g.drawImage(small, 150, 85, null);
         g.drawImage(medium, 200, 85, null);
         g.drawImage(big, 250, 85, null);
         g.drawImage(huge, 320, 85, null);
         g.drawString("Sizes:", 150, 100);
-        //draw colour choices
+
+        //draw colour choices -----------
         g.drawString("Colours:", 500, 30);
         g.setColor(Color.RED);
         g.fillRect(500, 40, 10, 10);
@@ -139,11 +137,12 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         //Colours ---------------------------
         setCurrentPaint(brush);
 
+
         //Paint--------------------
         if (dynamicMouseY > 150) {
             repaint();
 
-            if (brush.getShape() == PaintBrush.CIRCLE) {
+            if (brush.getShape() == PaintBrush.CIRCLE && brush.isDown()) {
                 switch (brush.getSize()) {
                     case PaintBrush.SMALL:
                         canvas.getGraphics().fillOval(e.getX() - 5, e.getY() - 150, 10, 10);
@@ -158,7 +157,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
                         canvas.getGraphics().fillOval(e.getX() - 65, e.getY() - 210, 130, 130);
                         break;
                 }
-            } else if (brush.getShape() == PaintBrush.SQUARE) {
+            } else if (brush.getShape() == PaintBrush.SQUARE && brush.isDown()) {
                 switch (brush.getSize()) {
                     case PaintBrush.SMALL:
                         canvas.getGraphics().fillRect(e.getX() - 5, e.getY() - 150, 10, 10);
@@ -182,6 +181,11 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         brush.setDown(false);
         dynamicMouseX = e.getX();
         dynamicMouseY = e.getY();
+        /*//Clearing ----------------- todo help with clearing canvas
+        if ((e.getX() >= 10 && e.getX() <= 10 + 64) && (e.getY() >= 75 && e.getY() <= 75 + 64)) { //if user clicks on the clearing X.
+            canvas.getGraphics().fillRect(canvas.getMinX(),canvas.getMinY(),canvas.getWidth(),canvas.getHeight());
+            Logger.logUserMessage("Cleared the canvas.");
+        }*/
     }
 
     @Deprecated
@@ -206,11 +210,11 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         dynamicMouseX = e.getX();
         dynamicMouseY = e.getY();
         if (dynamicMouseY > 150) {
-            //canvas.getGraphics().setColor(Color.BLACK);
+            //canvas.getGraphics().setColor(Color.GREEN);
             //canvas.getGraphics().fillOval(dynamicMouseX - 50, dynamicMouseY - 200, 100, 100);
             repaint();
 
-            if (brush.getShape() == PaintBrush.CIRCLE) {
+            if (brush.getShape() == PaintBrush.CIRCLE && brush.isDown()) {
                 switch (brush.getSize()) {
                     case PaintBrush.SMALL:
                         canvas.getGraphics().fillOval(e.getX() - 5, e.getY() - 150, 10, 10);
@@ -225,7 +229,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
                         canvas.getGraphics().fillOval(e.getX() - 65, e.getY() - 210, 130, 130);
                         break;
                 }
-            } else if (brush.getShape() == PaintBrush.SQUARE) {
+            } else if (brush.getShape() == PaintBrush.SQUARE && brush.isDown()) {
                 switch (brush.getSize()) {
                     case PaintBrush.SMALL:
                         canvas.getGraphics().fillRect(e.getX() - 5, e.getY() - 150, 10, 10);
