@@ -22,6 +22,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
     PaintBrush brush = new PaintBrush();
     Image circle, paintbucket, square, xMark, small, medium, big, huge;
     BufferedImage canvas;
+    Graphics b;
     int dynamicMouseX = 0, dynamicMouseY = 0;
 
     public PaintingPanel() {
@@ -37,9 +38,9 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             medium = ImageIO.read(new File("resource/medium.png"));
             big = ImageIO.read(new File("resource/big.png"));
             huge = ImageIO.read(new File("resource/hug.png"));
-            canvas = new BufferedImage(900, 850, BufferedImage.TYPE_3BYTE_BGR); //creates the canvas to paint to.
-            //canvas.getGraphics().setColor(Color.RED);
-            //canvas.getGraphics().fillRect(0,0,900,850);
+            canvas = new BufferedImage(900, 850, BufferedImage.TYPE_4BYTE_ABGR); //creates the canvas to paint to.
+            b = canvas.getGraphics();
+
             Logger.logOtherMessage("ImageLoader", "Succeeded.");
         } catch (Exception e) {
             System.err.println("Error Reading images. Program will exit.");
@@ -139,37 +140,38 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
 
 
         //Paint--------------------
+        b.setColor(brush.getColor());
         if (dynamicMouseY > 150) {
             repaint();
 
             if (brush.getShape() == PaintBrush.CIRCLE && brush.isDown()) {
                 switch (brush.getSize()) {
                     case PaintBrush.SMALL:
-                        canvas.getGraphics().fillOval(e.getX() - 5, e.getY() - 150, 10, 10);
+                        b.fillOval(e.getX() - 5, e.getY() - 150, 10, 10);
                         break;
                     case PaintBrush.MEDIUM:
-                        canvas.getGraphics().fillOval(e.getX() - 25, e.getY() - 170, 50, 50);
+                        b.fillOval(e.getX() - 25, e.getY() - 170, 50, 50);
                         break;
                     case PaintBrush.BIG:
-                        canvas.getGraphics().fillOval(e.getX() - 45, e.getY() - 200, 90, 90);
+                        b.fillOval(e.getX() - 45, e.getY() - 200, 90, 90);
                         break;
                     case PaintBrush.HUGE:
-                        canvas.getGraphics().fillOval(e.getX() - 65, e.getY() - 210, 130, 130);
+                        b.fillOval(e.getX() - 65, e.getY() - 210, 130, 130);
                         break;
                 }
             } else if (brush.getShape() == PaintBrush.SQUARE && brush.isDown()) {
                 switch (brush.getSize()) {
                     case PaintBrush.SMALL:
-                        canvas.getGraphics().fillRect(e.getX() - 5, e.getY() - 150, 10, 10);
+                        b.fillRect(e.getX() - 5, e.getY() - 150, 10, 10);
                         break;
                     case PaintBrush.MEDIUM:
-                        canvas.getGraphics().fillRect(e.getX() - 25, e.getY() - 170, 50, 50);
+                        b.fillRect(e.getX() - 25, e.getY() - 170, 50, 50);
                         break;
                     case PaintBrush.BIG:
-                        canvas.getGraphics().fillRect(e.getX() - 45, e.getY() - 200, 90, 90);
+                        b.fillRect(e.getX() - 45, e.getY() - 200, 90, 90);
                         break;
                     case PaintBrush.HUGE:
-                        canvas.getGraphics().fillRect(e.getX() - 65, e.getY() - 210, 130, 130);
+                        b.fillRect(e.getX() - 65, e.getY() - 210, 130, 130);
                         break;
                 }
             }
@@ -181,11 +183,12 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         brush.setDown(false);
         dynamicMouseX = e.getX();
         dynamicMouseY = e.getY();
-        /*//Clearing ----------------- todo help with clearing canvas
-        if ((e.getX() >= 10 && e.getX() <= 10 + 64) && (e.getY() >= 75 && e.getY() <= 75 + 64)) { //if user clicks on the clearing X.
-            canvas.getGraphics().fillRect(canvas.getMinX(),canvas.getMinY(),canvas.getWidth(),canvas.getHeight());
+        //Clearing ----------------- todo help with clearing canvas
+        if ((e.getX() >= 10 && e.getX() <= 74) && (e.getY() >= 60 && e.getY() <= 124)) { //if user clicks on the clearing X.
+            b.setColor(new Color(238, 238, 238));
+            b.fillRect(canvas.getMinX(), canvas.getMinY(), canvas.getWidth(), canvas.getHeight());
             Logger.logUserMessage("Cleared the canvas.");
-        }*/
+        }
     }
 
     @Deprecated
@@ -210,38 +213,37 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         dynamicMouseX = e.getX();
         dynamicMouseY = e.getY();
         if (dynamicMouseY > 150) {
-            //canvas.getGraphics().setColor(Color.GREEN);
-            //canvas.getGraphics().fillOval(dynamicMouseX - 50, dynamicMouseY - 200, 100, 100);
+            b.setColor(brush.getColor());
             repaint();
 
             if (brush.getShape() == PaintBrush.CIRCLE && brush.isDown()) {
                 switch (brush.getSize()) {
                     case PaintBrush.SMALL:
-                        canvas.getGraphics().fillOval(e.getX() - 5, e.getY() - 150, 10, 10);
+                        b.fillOval(e.getX() - 5, e.getY() - 150, 10, 10);
                         break;
                     case PaintBrush.MEDIUM:
-                        canvas.getGraphics().fillOval(e.getX() - 25, e.getY() - 170, 50, 50);
+                        b.fillOval(e.getX() - 25, e.getY() - 170, 50, 50);
                         break;
                     case PaintBrush.BIG:
-                        canvas.getGraphics().fillOval(e.getX() - 45, e.getY() - 200, 90, 90);
+                        b.fillOval(e.getX() - 45, e.getY() - 200, 90, 90);
                         break;
                     case PaintBrush.HUGE:
-                        canvas.getGraphics().fillOval(e.getX() - 65, e.getY() - 210, 130, 130);
+                        b.fillOval(e.getX() - 65, e.getY() - 210, 130, 130);
                         break;
                 }
             } else if (brush.getShape() == PaintBrush.SQUARE && brush.isDown()) {
                 switch (brush.getSize()) {
                     case PaintBrush.SMALL:
-                        canvas.getGraphics().fillRect(e.getX() - 5, e.getY() - 150, 10, 10);
+                        b.fillRect(e.getX() - 5, e.getY() - 150, 10, 10);
                         break;
                     case PaintBrush.MEDIUM:
-                        canvas.getGraphics().fillRect(e.getX() - 25, e.getY() - 170, 50, 50);
+                        b.fillRect(e.getX() - 25, e.getY() - 170, 50, 50);
                         break;
                     case PaintBrush.BIG:
-                        canvas.getGraphics().fillRect(e.getX() - 45, e.getY() - 200, 90, 90);
+                        b.fillRect(e.getX() - 45, e.getY() - 200, 90, 90);
                         break;
                     case PaintBrush.HUGE:
-                        canvas.getGraphics().fillRect(e.getX() - 65, e.getY() - 210, 130, 130);
+                        b.fillRect(e.getX() - 65, e.getY() - 210, 130, 130);
                         break;
                 }
             }
