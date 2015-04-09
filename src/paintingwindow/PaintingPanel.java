@@ -38,8 +38,11 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             medium = ImageIO.read(new File("resource/medium.png"));
             big = ImageIO.read(new File("resource/big.png"));
             huge = ImageIO.read(new File("resource/hug.png"));
+            //canvas---------
+            Logger.logOtherMessage("Canvas_Loader", "Loading the canvas...");
             canvas = new BufferedImage(900, 850, BufferedImage.TYPE_4BYTE_ABGR); //creates the canvas to paint to.
             b = canvas.getGraphics();
+            Logger.logOtherMessage("Canvas_Loader", "Succeeded.");
 
             Logger.logOtherMessage("ImageLoader", "Succeeded.");
         } catch (Exception e) {
@@ -49,7 +52,6 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         }
         addMouseMotionListener(this);
         addMouseListener(this);
-        addNotify();
     }
 
 
@@ -183,10 +185,11 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         brush.setDown(false);
         dynamicMouseX = e.getX();
         dynamicMouseY = e.getY();
-        //Clearing ----------------- todo help with clearing canvas
+        //Clearing -----------------
         if ((e.getX() >= 10 && e.getX() <= 74) && (e.getY() >= 60 && e.getY() <= 124)) { //if user clicks on the clearing X.
             b.setColor(new Color(238, 238, 238));
             b.fillRect(canvas.getMinX(), canvas.getMinY(), canvas.getWidth(), canvas.getHeight());
+            repaint();
             Logger.logUserMessage("Cleared the canvas.");
         }
     }

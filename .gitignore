@@ -16,6 +16,8 @@ hs_err_pid*
 .idea/*
 *.log
 out/*
+*.MF
+*.mf
 
 #Shells
 *.bat
