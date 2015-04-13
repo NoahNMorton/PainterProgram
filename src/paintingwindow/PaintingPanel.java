@@ -19,7 +19,7 @@ import java.io.File;
  */
 
 public class PaintingPanel extends JPanel implements MouseMotionListener, MouseListener {
-    PaintBrush brush = new PaintBrush();
+    PaintBrush brush = new PaintBrush(); //creates the PaintBrush to hold data about the current state of the brush.
     Image circle, paintbucket, square, xMark, small, medium, big, huge;
     BufferedImage canvas;
     Graphics b;
@@ -38,19 +38,19 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             medium = ImageIO.read(new File("resource/medium.png"));
             big = ImageIO.read(new File("resource/big.png"));
             huge = ImageIO.read(new File("resource/hug.png"));
-            //canvas---------
+            //canvas-----------------
             Logger.logOtherMessage("Canvas_Loader", "Loading the canvas...");
             canvas = new BufferedImage(900, 850, BufferedImage.TYPE_4BYTE_ABGR); //creates the canvas to paint to.
-            b = canvas.getGraphics();
+            b = canvas.getGraphics(); //gets a graphics object off of the canvas.
             Logger.logOtherMessage("Canvas_Loader", "Succeeded.");
 
             Logger.logOtherMessage("ImageLoader", "Succeeded.");
-        } catch (Exception e) {
+        } catch (Exception e) { //if something goes wrong with loading images, such as missing files.
             System.err.println("Error Reading images. Program will exit.");
             Logger.logErrorMessage("Error reading in images.");
             System.exit(-2);
         }
-        addMouseMotionListener(this);
+        addMouseMotionListener(this); //adds mouse listeners to the program
         addMouseListener(this);
     }
 
@@ -62,13 +62,15 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         g.setColor(Color.BLACK);
         g.drawString("Painter Program", 10, 20);
 
-        //draw all brush choices to the screen
+        //draw all brush choices to the screen --------------
         g.drawString("Brushes:", 150, 20);
         g.drawImage(paintbucket, 150, 30, null);
-        g.drawString("Clear all:", 10, 50);
-        g.drawImage(xMark, 10, 60, null);
         g.drawImage(circle, 215, 30, null);
         g.drawImage(square, 279, 30, null);
+
+        //draw screen clearer --------
+        g.drawString("Clear all:", 10, 50);
+        g.drawImage(xMark, 10, 60, null);
 
         //draw size choices -------------
         g.drawImage(small, 150, 85, null);
@@ -97,9 +99,8 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         g.fillRect(605, 40, 10, 10);
         g.setColor(Color.MAGENTA);
         g.fillRect(620, 40, 10, 10);
-
+        //draw the canvas----------------
         g.drawImage(canvas, 0, 150, null);
-
     }
 
     @Deprecated
@@ -113,39 +114,38 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         dynamicMouseY = e.getY();
 
         //Shapes---------------------------
-        if ((dynamicMouseX >= 150 && dynamicMouseX <= 150 + 64) && (dynamicMouseY >= 30 && dynamicMouseY <= 30 + 64)) {
+        if ((e.getX() >= 150 && e.getX() <= 150 + 64) && (e.getY() >= 30 && e.getY() <= 30 + 64)) { //if user clicks on the paint bucket option
             brush.setShape(PaintBrush.FILL);
             Logger.logUserMessage("Set brush shape to FILL.");
-        } else if ((dynamicMouseX >= 215 && dynamicMouseX <= 215 + 64) && (dynamicMouseY >= 30 && dynamicMouseY <= 30 + 64)) {
+        } else if ((e.getX() >= 215 && e.getX() <= 215 + 64) && (e.getY() >= 30 && e.getY() <= 30 + 64)) { //if user clicks on the circle brush option
             brush.setShape(PaintBrush.CIRCLE);
             Logger.logUserMessage("Set brush shape to CIRCLE.");
-        } else if ((dynamicMouseX >= 279 && dynamicMouseX <= 279 + 64) && (dynamicMouseY >= 30 && dynamicMouseY <= 30 + 64)) {
+        } else if ((e.getX() >= 279 && e.getX() <= 279 + 64) && (e.getY() >= 30 && e.getY() <= 30 + 64)) {//if user clicks on the square brush option
             brush.setShape(PaintBrush.SQUARE);
             Logger.logUserMessage("Set brush shape to SQUARE.");
         }
         //Sizes-----------------------
-        if ((dynamicMouseX >= 150 && dynamicMouseX <= 150 + 64) && (dynamicMouseY >= 85 && dynamicMouseY <= 85 + 64)) {
+        if ((e.getX() >= 150 && e.getX() <= 150 + 64) && (e.getY() >= 85 && e.getY() <= 85 + 64)) { //if user clicks on the small brush option
             brush.setSize(PaintBrush.SMALL);
             Logger.logUserMessage("Set brush SIZE to SMALL.");
-        } else if ((dynamicMouseX >= 200 && dynamicMouseX <= 200 + 64) && (dynamicMouseY >= 85 && dynamicMouseY <= 85 + 64)) {
+        } else if ((e.getX() >= 200 && e.getX() <= 200 + 64) && (e.getY() >= 85 && e.getY() <= 85 + 64)) { //if user clicks on the medium brush option
             brush.setSize(PaintBrush.MEDIUM);
             Logger.logUserMessage("Set brush size to MEDIUM.");
-        } else if ((dynamicMouseX >= 250 && dynamicMouseX <= 250 + 64) && (dynamicMouseY >= 85 && dynamicMouseY <= 85 + 64)) {
+        } else if ((e.getX() >= 250 && e.getX() <= 250 + 64) && (e.getY() >= 85 && e.getY() <= 85 + 64)) { //if user clicks on the big brush option
             brush.setSize(PaintBrush.BIG);
             Logger.logUserMessage("Set brush size to BIG.");
-        } else if ((dynamicMouseX >= 320 && dynamicMouseX <= 320 + 64) && (dynamicMouseY >= 85 && dynamicMouseY <= 85 + 64)) {
+        } else if ((e.getX() >= 320 && e.getX() <= 320 + 64) && (e.getY() >= 85 && e.getY() <= 85 + 64)) { //if user clicks on the huge brush option
             brush.setSize(PaintBrush.HUGE);
             Logger.logUserMessage("Set brush size to HUGE");
         }
         //Colours ---------------------------
-        setCurrentPaint(brush);
+        setCurrentPaint(brush); //sets the current paint based on the user's click.
 
 
         //Paint--------------------
-        b.setColor(brush.getColor());
-        if (dynamicMouseY > 150) {
+        b.setColor(brush.getColor()); //sets the painting colour to the current colour of the brush
+        if (e.getY() > 150) {
             repaint();
-
             if (brush.getShape() == PaintBrush.CIRCLE && brush.isDown()) {
                 switch (brush.getSize()) {
                     case PaintBrush.SMALL:
@@ -188,7 +188,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         //Clearing -----------------
         if ((e.getX() >= 10 && e.getX() <= 74) && (e.getY() >= 60 && e.getY() <= 124)) { //if user clicks on the clearing X.
             b.setColor(new Color(238, 238, 238));
-            b.fillRect(canvas.getMinX(), canvas.getMinY(), canvas.getWidth(), canvas.getHeight());
+            b.fillRect(canvas.getMinX(), canvas.getMinY(), canvas.getWidth(), canvas.getHeight()); //fill a large rectangle to clear the screen
             repaint();
             Logger.logUserMessage("Cleared the canvas.");
         }
@@ -207,7 +207,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
     @Override
     public void addNotify() {
         super.addNotify();
-        requestFocus();
+        requestFocus(); //brings the window to the top of the stack.
         Logger.logOtherMessage("Window", "Requesting focus on the window.");
     }
 
@@ -215,10 +215,9 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
     public void mouseDragged(MouseEvent e) {
         dynamicMouseX = e.getX();
         dynamicMouseY = e.getY();
-        if (dynamicMouseY > 150) {
+        if (e.getY() > 150) {
             b.setColor(brush.getColor());
             repaint();
-
             if (brush.getShape() == PaintBrush.CIRCLE && brush.isDown()) {
                 switch (brush.getSize()) {
                     case PaintBrush.SMALL:
