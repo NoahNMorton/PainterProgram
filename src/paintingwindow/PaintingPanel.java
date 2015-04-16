@@ -20,7 +20,7 @@ import java.io.File;
 
 public class PaintingPanel extends JPanel implements MouseMotionListener, MouseListener {
     PaintBrush brush = new PaintBrush(); //creates the PaintBrush to hold data about the current state of the brush.
-    Image circle, paintbucket, square, xMark, small, medium, big, huge;
+    Image circle, paintbucket, square, xMark, small, medium, big, huge,eraser;
     BufferedImage canvas;
     Graphics b;
     int dynamicMouseX = 0, dynamicMouseY = 0;
@@ -38,6 +38,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             medium = ImageIO.read(new File("resource/medium.png"));
             big = ImageIO.read(new File("resource/big.png"));
             huge = ImageIO.read(new File("resource/hug.png"));
+            eraser = ImageIO.read(new File("resource/eraser.png"));
             //canvas-----------------
             Logger.logOtherMessage("Canvas_Loader", "Loading the canvas...");
             canvas = new BufferedImage(900, 850, BufferedImage.TYPE_4BYTE_ABGR); //creates the canvas to paint to.
@@ -67,6 +68,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         g.drawImage(paintbucket, 150, 30, null);
         g.drawImage(circle, 215, 30, null);
         g.drawImage(square, 279, 30, null);
+        g.drawImage(eraser, 343, 30, null);
 
         //draw screen clearer --------
         g.drawString("Clear all:", 10, 50);
