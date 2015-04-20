@@ -23,6 +23,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
     Image circle, paintbucket, square, xMark, small, medium, big, huge,eraser;
     BufferedImage canvas;
     Graphics b;
+    public static Color canvasColour = new Color(238, 238, 238);
     int dynamicMouseX = 0, dynamicMouseY = 0;
 
     public PaintingPanel() {
@@ -126,6 +127,10 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             brush.setShape(PaintBrush.SQUARE);
             Logger.logUserMessage("Set brush shape to SQUARE.");
         }
+        else if ((e.getX() >= 343 && e.getX() <= 343 + 64) && (e.getY() >= 30 && e.getY() <= 30 + 64)) {//if user clicks on the eraser option
+            brush.setShape(PaintBrush.ERASER);
+            Logger.logUserMessage("Set brush shape to ERASER.");
+        }
         //Sizes-----------------------
         if ((e.getX() >= 150 && e.getX() <= 150 + 64) && (e.getY() >= 85 && e.getY() <= 85 + 64)) { //if user clicks on the small brush option
             brush.setSize(PaintBrush.SMALL);
@@ -189,7 +194,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         dynamicMouseY = e.getY();
         //Clearing -----------------
         if ((e.getX() >= 10 && e.getX() <= 74) && (e.getY() >= 60 && e.getY() <= 124)) { //if user clicks on the clearing X.
-            b.setColor(new Color(238, 238, 238));
+            b.setColor(canvasColour);
             b.fillRect(canvas.getMinX(), canvas.getMinY(), canvas.getWidth(), canvas.getHeight()); //fill a large rectangle to clear the screen
             repaint();
             Logger.logUserMessage("Cleared the canvas.");

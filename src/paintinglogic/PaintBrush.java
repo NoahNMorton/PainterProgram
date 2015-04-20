@@ -1,5 +1,7 @@
 package paintinglogic;
 
+import paintingwindow.PaintingPanel;
+
 import java.awt.*;
 
 /**
@@ -11,7 +13,7 @@ import java.awt.*;
 public class PaintBrush {
 
     public static final int SMALL = 1, MEDIUM = 2, BIG = 3, HUGE = 4; //sizes
-    public static final int CIRCLE = 1, SQUARE = 2, FILL = 3; //shapes
+    public static final int CIRCLE = 1, SQUARE = 2, FILL = 3,ERASER=4; //shapes
     private boolean down;
     private int size, shape;
     private Color color;
@@ -54,6 +56,11 @@ public class PaintBrush {
 
     public void setShape(int shape) {
         this.shape = shape;
+        if(shape==ERASER)
+        {
+            setColor(PaintingPanel.canvasColour);
+            setSize(MEDIUM);
+        }
     }
 
     @Override
