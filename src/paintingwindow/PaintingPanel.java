@@ -22,7 +22,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
     public static Color canvasColour = new Color(238, 238, 238);
     public static Color non_eraserColor = Color.BLACK;
     PaintBrush brush = new PaintBrush(); //creates the PaintBrush to hold data about the current state of the brush.
-    Image circle, paintbucket, square, xMark, small, medium, big, huge,eraser;
+    Image circle, paintbucket, square, xMark, small, medium, big, huge, eraser;
     BufferedImage canvas;
     Graphics b;
     int dynamicMouseX = 0, dynamicMouseY = 0;
@@ -103,6 +103,19 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         g.fillRect(605, 40, 10, 10);
         g.setColor(Color.MAGENTA);
         g.fillRect(620, 40, 10, 10);
+        g.setColor(new Color(150, 70, 0)); //brown
+        g.fillRect(635, 40, 10, 10);
+        g.setColor(new Color(0, 0, 100)); //dark blue
+        g.fillRect(650, 40, 10, 10);
+        g.setColor(new Color(100, 100, 0)); //olive green
+        g.fillRect(665, 40, 10, 10);
+        g.setColor(Color.GRAY);
+        g.fillRect(680, 40, 10, 10);
+        g.setColor(new Color(232, 227, 163)); //tan
+        g.fillRect(695, 40, 10, 10);
+        g.setColor(new Color(163, 255, 210)); //light green
+        g.fillRect(710, 40, 10, 10);
+
         //draw the canvas----------------
         g.drawImage(canvas, 0, 150, null);
     }
@@ -132,8 +145,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             brush.setShape(PaintBrush.SQUARE);
             brush.setColor(non_eraserColor);
             Logger.logUserMessage("Set brush shape to SQUARE.");
-        }
-        else if ((e.getX() >= 343 && e.getX() <= 343 + 64) && (e.getY() >= 30 && e.getY() <= 30 + 64)) {//if user clicks on the eraser option
+        } else if ((e.getX() >= 343 && e.getX() <= 343 + 64) && (e.getY() >= 30 && e.getY() <= 30 + 64)) {//if user clicks on the eraser option
             brush.setShape(PaintBrush.ERASER);
             Logger.logUserMessage("Set brush shape to ERASER.");
         }
@@ -354,6 +366,30 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             brush.setColor(Color.MAGENTA);
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to MAGENTA.");
+        } else if ((dynamicMouseX >= 635 && dynamicMouseX <= 645) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+            brush.setColor(new Color(150, 70, 0));
+            non_eraserColor = brush.getColor();
+            Logger.logUserMessage("Set the colour of the brush to BROWN.");
+        } else if ((dynamicMouseX >= 650 && dynamicMouseX <= 660) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+            brush.setColor(new Color(0, 0, 100));
+            non_eraserColor = brush.getColor();
+            Logger.logUserMessage("Set the colour of the brush to DARK_BLUE.");
+        } else if ((dynamicMouseX >= 665 && dynamicMouseX <= 675) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+            brush.setColor(new Color(100, 100, 0));
+            non_eraserColor = brush.getColor();
+            Logger.logUserMessage("Set the colour of the brush to OLIVE_GREEN.");
+        } else if ((dynamicMouseX >= 680 && dynamicMouseX <= 690) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+            brush.setColor(Color.GRAY);
+            non_eraserColor = brush.getColor();
+            Logger.logUserMessage("Set the colour of the brush to GREY.");
+        } else if ((dynamicMouseX >= 695 && dynamicMouseX <= 705) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+            brush.setColor(new Color(232, 227, 163));
+            non_eraserColor = brush.getColor();
+            Logger.logUserMessage("Set the colour of the brush to TAN.");
+        } else if ((dynamicMouseX >= 710 && dynamicMouseX <= 720) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+            brush.setColor(new Color(163, 255, 210));
+            non_eraserColor = brush.getColor();
+            Logger.logUserMessage("Set the colour of the brush to LIGHT_GREEN.");
         }
     }
 }
