@@ -59,7 +59,6 @@ public class PaintBrush {
         if(shape==ERASER)
         {
             setColor(PaintingPanel.canvasColour);
-            setSize(MEDIUM);
         }
     }
 
