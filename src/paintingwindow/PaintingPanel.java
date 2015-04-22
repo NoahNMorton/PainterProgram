@@ -72,7 +72,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         g.drawImage(square, 279, 30, null);
         g.drawImage(eraser, 343, 30, null);
         g.drawString("Set custom colour:", 790, 50);
-        g.setColor(Color.BLUE);
+        g.setColor(brush.getColor());
         g.fillRect(820, 70, 50, 50);
         g.setColor(Color.BLACK);
 
@@ -440,6 +440,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             if (b < 0) b = 0;
 
             brush.setColor(new Color(r, g, b));
+            Logger.logUserMessage("Set the brush colour to a custom colour, ["+r+","+g+","+b+"]");
         } catch (Exception e) {
             System.err.println("[Error] Color selector had an issue.");
             Logger.logErrorMessage("Seems the colour selector had an issue. Ending it silently...");
