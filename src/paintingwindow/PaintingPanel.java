@@ -71,6 +71,10 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         g.drawImage(circle, 215, 30, null);
         g.drawImage(square, 279, 30, null);
         g.drawImage(eraser, 343, 30, null);
+        g.drawString("Set custom colour:", 790, 50);
+        g.setColor(Color.BLUE);
+        g.fillRect(820, 70, 50, 50);
+        g.setColor(Color.BLACK);
 
         //draw screen clearer --------
         g.drawString("Clear all:", 10, 50);
@@ -115,6 +119,13 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         g.fillRect(695, 40, 10, 10);
         g.setColor(new Color(163, 255, 210)); //light green
         g.fillRect(710, 40, 10, 10);
+        //second line of colours--
+        g.setColor(new Color(67, 97, 178)); //navy blue
+        g.fillRect(500, 60, 10, 10);
+        g.setColor(new Color(110, 7, 0)); //dark red
+        g.fillRect(515, 60, 10, 10);
+        g.setColor(new Color(197, 232, 255)); //baby blue
+        g.fillRect(530, 60, 10, 10);
 
         //draw the canvas----------------
         g.drawImage(canvas, 0, 150, null);
@@ -165,6 +176,9 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         }
         //Colours ---------------------------
         setCurrentPaint(brush); //sets the current paint based on the user's click.
+        if ((e.getX() >= 820 && e.getX() <= 870) && (e.getY() >= 70 && e.getY() <= 120)) {
+            getUserRGB(brush);
+        }
         //Paint--------------------
         b.setColor(brush.getColor()); //sets the painting colour to the current colour of the brush
         if (e.getY() > 150) {
@@ -231,6 +245,8 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             //resets the canvas and brush paint back to black, the default.
             brush.setColor(Color.BLACK);
             b.setColor(brush.getColor());
+            brush.setShape(PaintBrush.CIRCLE);
+            brush.setSize(PaintBrush.SMALL);
             Logger.logUserMessage("Cleared the canvas.");
         }
     }
@@ -390,6 +406,43 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             brush.setColor(new Color(163, 255, 210));
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to LIGHT_GREEN.");
+        } else if ((dynamicMouseX >= 500 && dynamicMouseX <= 510) && (dynamicMouseY >= 60 && dynamicMouseY <= 70)) {
+            brush.setColor(new Color(67, 97, 178));
+            non_eraserColor = brush.getColor();
+            Logger.logUserMessage("Set the colour of the brush to NAVY_BLUE");
+        } else if ((dynamicMouseX >= 515 && dynamicMouseX <= 525) && (dynamicMouseY >= 60 && dynamicMouseY <= 70)) {
+            brush.setColor(new Color(110, 8, 0));
+            non_eraserColor = brush.getColor();
+            Logger.logUserMessage("Set the colour of the brush to DARK_RED");
+        } else if ((dynamicMouseX >= 500 && dynamicMouseX <= 510) && (dynamicMouseY >= 60 && dynamicMouseY <= 70)) {
+            brush.setColor(new Color(197, 232, 255));
+            non_eraserColor = brush.getColor();
+            Logger.logUserMessage("Set the colour of the brush to BABY_BLUE");
+        }
+    }
+
+    /**
+     * Method to open a dialogue to let the user set their own colour.
+     *
+     * @param brush the paintbrush, to set the colour to.
+     */
+    private void getUserRGB(PaintBrush brush) {
+        try {
+            int r = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter RED's value."));
+            int g = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter GREEN's value."));
+            int b = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter BLUE's value."));
+            //if numbers are too high or low, fix them.
+            if (r > 255) r = 255;
+            if (r < 0) r = 0;
+            if (g > 255) g = 255;
+            if (g < 0) g = 0;
+            if (b > 255) b = 255;
+            if (b < 0) b = 0;
+
+            brush.setColor(new Color(r, g, b));
+        } catch (Exception e) {
+            System.err.println("[Error] Color selector had an issue.");
+            Logger.logErrorMessage("Seems the colour selector had an issue. Ending it silently...");
         }
     }
 }
