@@ -70,12 +70,20 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         g.drawImage(circle, 215, 30, null);
         g.drawImage(square, 279, 30, null);
         g.drawImage(eraser, 343, 30, null);
-        
+
         //Custom colour setter
+        g.drawString("Click to", 790, 30);
         g.drawString("Set custom colour:", 790, 50);
         g.setColor(brush.getColor()); //button rectangle will also show the current painting colour.
         g.fillRect(820, 70, 50, 50);
         g.setColor(Color.BLACK);
+
+        //random colour setter -----
+        g.setColor(new Color((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255))); //continually sets the rect(rekt) to a random colour.
+        g.drawRect(500, 100, 110, 30);
+        g.setColor(Color.BLACK);
+        g.drawString("Random Colour", 510, 120);
+
 
         //draw screen clearer --------
         g.drawString("Clear all:", 10, 50);
@@ -89,7 +97,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         g.drawString("Sizes:", 150, 100);
 
         //draw colour choices -----------
-        g.drawString("Colours:", 500, 30);
+        g.drawString("Preset colour panel:", 500, 30);
         g.setColor(Color.RED);
         g.fillRect(500, 40, 10, 10);
         g.setColor(Color.BLUE);
@@ -149,7 +157,8 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             Logger.logUserMessage("Set brush shape to FILL."); todo implement filling. also remember to re-enable paintbukt icon
 
         }*/
-        /*else*/ if ((e.getX() >= 215 && e.getX() <= 215 + 64) && (e.getY() >= 30 && e.getY() <= 30 + 64)) { //if user clicks on the circle brush option
+        /*else*/
+        if ((e.getX() >= 215 && e.getX() <= 215 + 64) && (e.getY() >= 30 && e.getY() <= 30 + 64)) { //if user clicks on the circle brush option
             brush.setShape(PaintBrush.CIRCLE);
             brush.setColor(non_eraserColor);
             Logger.logUserMessage("Set brush shape to CIRCLE.");
@@ -177,7 +186,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         }
         //Colours ---------------------------
         setCurrentPaint(brush); //sets the current paint based on the user's click.
-        if ((e.getX() >= 820 && e.getX() <= 870) && (e.getY() >= 70 && e.getY() <= 120)) {
+        if ((e.getX() >= 820 && e.getX() <= 870) && (e.getY() >= 70 && e.getY() <= 120) && brush.getShape() != PaintBrush.ERASER) {
             getUserRGB(brush);
         }
         //Paint--------------------
@@ -244,6 +253,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             b.fillRect(canvas.getMinX(), canvas.getMinY(), canvas.getWidth(), canvas.getHeight()); //fill a large rectangle to clear the screen
             repaint();
             //resets the canvas and brush paint back to black, the default. And yes, when you have gone black, you can indeed go back.
+            non_eraserColor = Color.BLACK; //reset the color memory to default
             brush.setColor(Color.BLACK);
             b.setColor(brush.getColor());
             brush.setShape(PaintBrush.CIRCLE);
@@ -334,8 +344,8 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
     /**
      * Method to fill an area with colour.
      *
-     * @param g     the graphics from paint
-     * @param color the colour to fill with
+     * @param startX the x to start filling from, point of click
+     * @param startY the y to start filling from.
      */
     private void fillWithColour(int startX, int startY) {
         //todo recursive colour filling method
@@ -419,7 +429,12 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             brush.setColor(new Color(197, 232, 255));
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to BABY_BLUE");
+        } else if ((dynamicMouseX >= 500 && dynamicMouseX <= 610) && (dynamicMouseY >= 100 && dynamicMouseY <= 130)) { //set the drawing colour to a random color.
+            int red = (int) (Math.random() * 255), green = (int) (Math.random() * 255), blue = (int) (Math.random() * 255);
+            brush.setColor(new Color(red, green, blue));
+            Logger.logUserMessage("Set the colour of the brush to a random colour, [" + red + "," + green + "," + blue + "]");
         }
+        repaint();
     }
 
     /**
@@ -441,7 +456,8 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             if (b < 0) b = 0;
 
             brush.setColor(new Color(r, g, b));
-            Logger.logUserMessage("Set the brush colour to a custom colour, ["+r+","+g+","+b+"]");
+            Logger.logUserMessage("Set the brush colour to a custom colour, [" + r + "," + g + "," + b + "]");
+            repaint();
         } catch (Exception e) {
             System.err.println("[Error] Color selector had an issue.");
             Logger.logErrorMessage("Seems the colour selector had an issue. Ending it silently...");
