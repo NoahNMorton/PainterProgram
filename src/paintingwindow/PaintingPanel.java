@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 /**
- * @author K1211282
+ * @author Noah Morton
  *         Created on: 3/17/2015 , Time is: 1:04 PM
  *         Part of Project: PaintingProgram
  */
@@ -24,8 +24,8 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
     PaintBrush brush = new PaintBrush(); //creates the PaintBrush to hold data about the current state of the brush.
     Image circle, paintbucket, square, xMark, small, medium, big, huge, eraser;
     BufferedImage canvas;
-    Graphics b;
-    int dynamicMouseX = 0, dynamicMouseY = 0;
+    Graphics b; //graphics instance used for painting to the canvas
+    int dynamicMouseX = 0, dynamicMouseY = 0; //middleman variables to get the current mouse location.
 
     public PaintingPanel() {
         Logger.logCodeMessage("Setting size of window to 900x1000");
@@ -42,11 +42,10 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             huge = ImageIO.read(new File("resource/hug.png"));
             eraser = ImageIO.read(new File("resource/eraser.png"));
             //canvas-----------------
-            Logger.logOtherMessage("Canvas_Loader", "Loading the canvas...");
+            Logger.logOtherMessage("CanvasLoader", "Loading the canvas...");
             canvas = new BufferedImage(900, 850, BufferedImage.TYPE_4BYTE_ABGR); //creates the canvas to paint to.
             b = canvas.getGraphics(); //gets a graphics object off of the canvas.
-            Logger.logOtherMessage("Canvas_Loader", "Succeeded.");
-
+            Logger.logOtherMessage("CanvasLoader", "Succeeded.");
             Logger.logOtherMessage("ImageLoader", "Succeeded.");
         } catch (Exception e) { //if something goes wrong with loading images, such as missing files.
             System.err.println("Error Reading images. Program will exit.");
@@ -67,12 +66,14 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
 
         //draw all brush choices to the screen --------------
         g.drawString("Brushes:", 150, 20);
-        //g.drawImage(paintbucket, 150, 30, null);
+        //g.drawImage(paintbucket, 150, 30, null); //temporarily deactivated until I can implement filling
         g.drawImage(circle, 215, 30, null);
         g.drawImage(square, 279, 30, null);
         g.drawImage(eraser, 343, 30, null);
+        
+        //Custom colour setter
         g.drawString("Set custom colour:", 790, 50);
-        g.setColor(brush.getColor());
+        g.setColor(brush.getColor()); //button rectangle will also show the current painting colour.
         g.fillRect(820, 70, 50, 50);
         g.setColor(Color.BLACK);
 
@@ -148,7 +149,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             Logger.logUserMessage("Set brush shape to FILL."); todo implement filling. also remember to re-enable paintbukt icon
 
         }*/
-        if ((e.getX() >= 215 && e.getX() <= 215 + 64) && (e.getY() >= 30 && e.getY() <= 30 + 64)) { //if user clicks on the circle brush option
+        /*else*/ if ((e.getX() >= 215 && e.getX() <= 215 + 64) && (e.getY() >= 30 && e.getY() <= 30 + 64)) { //if user clicks on the circle brush option
             brush.setShape(PaintBrush.CIRCLE);
             brush.setColor(non_eraserColor);
             Logger.logUserMessage("Set brush shape to CIRCLE.");
@@ -239,10 +240,10 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         dynamicMouseY = e.getY();
         //Clearing -----------------
         if ((e.getX() >= 10 && e.getX() <= 74) && (e.getY() >= 60 && e.getY() <= 124)) { //if user clicks on the clearing X.
-            b.setColor(canvasColour);
+            b.setColor(canvasColour); //set the colour to the background colour.
             b.fillRect(canvas.getMinX(), canvas.getMinY(), canvas.getWidth(), canvas.getHeight()); //fill a large rectangle to clear the screen
             repaint();
-            //resets the canvas and brush paint back to black, the default.
+            //resets the canvas and brush paint back to black, the default. And yes, when you have gone black, you can indeed go back.
             brush.setColor(Color.BLACK);
             b.setColor(brush.getColor());
             brush.setShape(PaintBrush.CIRCLE);
@@ -305,7 +306,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
                         b.fillRect(e.getX() - 65, e.getY() - 210, 130, 130);
                         break;
                 }
-            } else if (brush.getShape() == PaintBrush.ERASER && brush.isDown()) { //square brush.
+            } else if (brush.getShape() == PaintBrush.ERASER && brush.isDown()) { //eraser brush.
                 switch (brush.getSize()) {
                     case PaintBrush.SMALL:
                         b.fillRect(e.getX() - 5, e.getY() - 150, 10, 10);
@@ -336,7 +337,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
      * @param g     the graphics from paint
      * @param color the colour to fill with
      */
-    private void fillWithColour(Graphics g, Color color, int startX, int startY) {
+    private void fillWithColour(int startX, int startY) {
         //todo recursive colour filling method
     }
 
@@ -428,9 +429,9 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
      */
     private void getUserRGB(PaintBrush brush) {
         try {
-            int r = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter RED's value."));
-            int g = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter GREEN's value."));
-            int b = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter BLUE's value."));
+            int r = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter RED's value.\nMust be an integer value from 0-255"));
+            int g = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter GREEN's value.\nMust be an integer value from 0-255"));
+            int b = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter BLUE's value.\nMust be an integer value from 0-255"));
             //if numbers are too high or low, fix them.
             if (r > 255) r = 255;
             if (r < 0) r = 0;
