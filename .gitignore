@@ -18,6 +18,7 @@ hs_err_pid*
 out/*
 *.MF
 *.mf
+painting.png
 
 #Shells
 *.bat

@@ -11,6 +11,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+//ImageIO.write(canvas, "png", new File("/painting.png"));
 
 /**
  * @author Noah Morton
@@ -22,7 +24,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
     public static Color canvasColour = new Color(238, 238, 238);
     public static Color non_eraserColor = Color.BLACK;
     PaintBrush brush = new PaintBrush(); //creates the PaintBrush to hold data about the current state of the brush.
-    Image circle, paintbucket, square, xMark, small, medium, big, huge, eraser;
+    Image circle, paintbucket, square, xMark, small, medium, big, huge, eraser, floppyDisk;
     BufferedImage canvas;
     Graphics b; //graphics instance used for painting to the canvas
     int dynamicMouseX = 0, dynamicMouseY = 0; //middleman variables to get the current mouse location.
@@ -41,6 +43,8 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             big = ImageIO.read(new File("resource/big.png"));
             huge = ImageIO.read(new File("resource/hug.png"));
             eraser = ImageIO.read(new File("resource/eraser.png"));
+            floppyDisk = ImageIO.read(new File("resource/floppy_disk.png"));
+
             //canvas-----------------
             Logger.logOtherMessage("CanvasLoader", "Loading the canvas...");
             canvas = new BufferedImage(900, 850, BufferedImage.TYPE_4BYTE_ABGR); //creates the canvas to paint to.
@@ -136,6 +140,10 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         g.setColor(new Color(197, 232, 255)); //baby blue
         g.fillRect(530, 60, 10, 10);
 
+        //save icon ----------
+        g.drawImage(floppyDisk, 680, 80, null);
+
+
         //draw the canvas----------------
         g.drawImage(canvas, 0, 150, null);
     }
@@ -184,11 +192,23 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
             brush.setSize(PaintBrush.HUGE);
             Logger.logUserMessage("Set brush size to HUGE");
         }
+
+        //image saving ----------------
+        if ((e.getX() >= 680 && e.getX() <= 752) && (e.getY() >= 80 && e.getY() <= 152)) {
+
+            try {
+                ImageIO.write(canvas, "png", new File("painting.png")); //todo maybe add naming and file type choose
+                Logger.logUserMessage("Saved the current painting as \"painting.png\"");
+            } catch (IOException e1) {
+                System.err.println("[Error] Issue with writing image.");
+                Logger.logErrorMessage("Issue with writing painting image.");
+            }
+        }
+
+
         //Colours ---------------------------
         setCurrentPaint(brush); //sets the current paint based on the user's click.
-        if ((e.getX() >= 820 && e.getX() <= 870) && (e.getY() >= 70 && e.getY() <= 120) && brush.getShape() != PaintBrush.ERASER) {
-            getUserRGB(brush);
-        }
+
         //Paint--------------------
         b.setColor(brush.getColor()); //sets the painting colour to the current colour of the brush
         if (e.getY() > 150) {
@@ -249,16 +269,22 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         dynamicMouseY = e.getY();
         //Clearing -----------------
         if ((e.getX() >= 10 && e.getX() <= 74) && (e.getY() >= 60 && e.getY() <= 124)) { //if user clicks on the clearing X.
-            b.setColor(canvasColour); //set the colour to the background colour.
-            b.fillRect(canvas.getMinX(), canvas.getMinY(), canvas.getWidth(), canvas.getHeight()); //fill a large rectangle to clear the screen
-            repaint();
-            //resets the canvas and brush paint back to black, the default. And yes, when you have gone black, you can indeed go back.
-            non_eraserColor = Color.BLACK; //reset the color memory to default
-            brush.setColor(Color.BLACK);
-            b.setColor(brush.getColor());
-            brush.setShape(PaintBrush.CIRCLE);
-            brush.setSize(PaintBrush.SMALL);
-            Logger.logUserMessage("Cleared the canvas.");
+            int clearAll = 1; //false
+            clearAll = JOptionPane.showConfirmDialog(null, "Clear the entire painting?\nBe careful, no undo!"); //credit to Cullen Phalen
+
+            if (clearAll == 0) { //true
+                b.setColor(canvasColour); //set the colour to the background colour.
+                b.fillRect(canvas.getMinX(), canvas.getMinY(), canvas.getWidth(), canvas.getHeight()); //fill a large rectangle to clear the screen
+                repaint();
+                //resets the canvas and brush paint back to black, the default. And yes, when you have gone black, you can indeed go back.
+                non_eraserColor = Color.BLACK; //reset the color memory to default
+                brush.setColor(Color.BLACK);
+                b.setColor(brush.getColor());
+                brush.setShape(PaintBrush.CIRCLE);
+                brush.setSize(PaintBrush.SMALL);
+                Logger.logUserMessage("Cleared the canvas.");
+            } else
+                clearAll = 1;
         }
     }
 
