@@ -12,3 +12,11 @@ Click the floppy disk to save the current painting.
 *What's included in the release:*
 
 Included in the release is the jar for running the program, a resource folder containing the icon pictures, a copy of the license, and this readme file.
+
+
+--------
+
+Currently unimplemented:
+~A way to list/open files
+~A way to fill colour
+~More types of brushes

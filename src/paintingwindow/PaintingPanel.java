@@ -11,8 +11,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-//ImageIO.write(canvas, "png", new File("/painting.png"));
 
 /**
  * @author Noah Morton
@@ -21,21 +19,21 @@ import java.io.IOException;
  */
 
 public class PaintingPanel extends JPanel implements MouseMotionListener, MouseListener {
-    public static Color canvasColour = new Color(238, 238, 238);
+    public static Color canvasColour = new Color(238, 238, 238); //the default colour of the canvas, a light grey
     public static Color non_eraserColor = Color.BLACK;
     PaintBrush brush = new PaintBrush(); //creates the PaintBrush to hold data about the current state of the brush.
-    Image circle, paintbucket, square, xMark, small, medium, big, huge, eraser, floppyDisk;
+    Image circle, paintBucket, square, xMark, small, medium, big, huge, eraser, floppyDisk;
     BufferedImage canvas;
     Graphics b; //graphics instance used for painting to the canvas
     int dynamicMouseX = 0, dynamicMouseY = 0; //middleman variables to get the current mouse location.
 
     public PaintingPanel() {
         Logger.logCodeMessage("Setting size of window to 900x1000");
-        setSize(900, 1000); //set size to 900x1000 pixels
+        setSize(1000, 1000); //set size to 1000x1000 pixels
         //load all images, such as brush size chooser, and other icons
         try {
             circle = ImageIO.read(new File("resource/circle.png"));
-            paintbucket = ImageIO.read(new File("resource/paintbucket.png"));
+            paintBucket = ImageIO.read(new File("resource/paintbucket.png"));
             square = ImageIO.read(new File("resource/square.png"));
             xMark = ImageIO.read(new File("resource/x.png"));
             small = ImageIO.read(new File("resource/small.png"));
@@ -47,7 +45,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
 
             //canvas-----------------
             Logger.logOtherMessage("CanvasLoader", "Loading the canvas...");
-            canvas = new BufferedImage(900, 850, BufferedImage.TYPE_4BYTE_ABGR); //creates the canvas to paint to.
+            canvas = new BufferedImage(1000, 850, BufferedImage.TYPE_4BYTE_ABGR); //creates the canvas to paint to.
             b = canvas.getGraphics(); //gets a graphics object off of the canvas.
             Logger.logOtherMessage("CanvasLoader", "Succeeded.");
             Logger.logOtherMessage("ImageLoader", "Succeeded.");
@@ -70,7 +68,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
 
         //draw all brush choices to the screen --------------
         g.drawString("Brushes:", 150, 20);
-        //g.drawImage(paintbucket, 150, 30, null); //temporarily deactivated until I can implement filling
+        //g.drawImage(paintBucket, 150, 30, null); //temporarily deactivated until I can implement filling
         g.drawImage(circle, 215, 30, null);
         g.drawImage(square, 279, 30, null);
         g.drawImage(eraser, 343, 30, null);
@@ -195,19 +193,29 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
 
         //image saving ----------------
         if ((e.getX() >= 680 && e.getX() <= 752) && (e.getY() >= 80 && e.getY() <= 152)) {
+            String name = JOptionPane.showInputDialog(null, "Provide a name to save your painting as.\nFile name cannot contain: / or ' or \" or ? or \\");
+            //If name contains illegal characters, set them to underscore.
+            name = name.replace('/', '_'); // /
+            name = name.replace('\'', '_'); // '
+            name = name.replace('\"', '_'); // "
+            name = name.replace('?', '_'); // ?
+            name = name.replace('\\', '_'); // \\
 
             try {
-                ImageIO.write(canvas, "png", new File("painting.png")); //todo maybe add naming and file type choose
-                Logger.logUserMessage("Saved the current painting as \"painting.png\"");
-            } catch (IOException e1) {
+                ImageIO.write(canvas, "png", new File(name + ".png"));
+                Logger.logUserMessage("Saved the current painting as \"" + name + ".png\"");
+            } catch (Exception e1) {
                 System.err.println("[Error] Issue with writing image.");
-                Logger.logErrorMessage("Issue with writing painting image.");
+                Logger.logErrorMessage("Issue with writing painting image, likely bad name, name of attempted save is " + name);
             }
         }
 
 
         //Colours ---------------------------
         setCurrentPaint(brush); //sets the current paint based on the user's click.
+        if ((e.getX() >= 820 && e.getX() <= 870) && (e.getY() >= 70 && e.getY() <= 120) && brush.getShape() != PaintBrush.ERASER) {
+            getUserRGB(brush); //popup asking for a custom RGB value.
+        }
 
         //Paint--------------------
         b.setColor(brush.getColor()); //sets the painting colour to the current colour of the brush
