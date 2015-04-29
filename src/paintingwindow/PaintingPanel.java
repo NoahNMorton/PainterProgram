@@ -25,7 +25,6 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
     Image circle, paintBucket, square, xMark, small, medium, big, huge, eraser, floppyDisk;
     BufferedImage canvas;
     Graphics b; //graphics instance used for painting to the canvas
-    int dynamicMouseX = 0, dynamicMouseY = 0; //middleman variables to get the current mouse location.
 
 
     public PaintingPanel() {
@@ -154,8 +153,6 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
     @Override
     public void mousePressed(MouseEvent e) {
         brush.setDown(true);
-        dynamicMouseX = e.getX();
-        dynamicMouseY = e.getY();
 
         //Shapes---------------------------
         /*if ((e.getX() >= 150 && e.getX() <= 150 + 64) && (e.getY() >= 30 && e.getY() <= 30 + 64)) { //if user clicks on the paint bucket option
@@ -194,30 +191,11 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
 
         //image saving ----------------
         if ((e.getX() >= 680 && e.getX() <= 752) && (e.getY() >= 80 && e.getY() <= 152)) {
-            String name = JOptionPane.showInputDialog(null, "Provide a name to save your painting as.\nFile name cannot contain: \\ / : * ? \" < > | ");
-            //If name contains illegal characters, set them to underscore.
-            name = name.replace('/', '_'); // /
-            name = name.replace('\"', '_'); // "
-            name = name.replace('?', '_'); // ?
-            name = name.replace('\\', '_'); // \\
-            name = name.replace('*', '_'); // *
-            name = name.replace('<', '_'); // <
-            name = name.replace('>', '_'); // >
-            name = name.replace('|', '_'); // |
-            name = name.replace(':', '_'); // |
-
-            try {
-                ImageIO.write(canvas, "png", new File(name + ".png"));
-                Logger.logUserMessage("Saved the current painting as \"" + name + ".png\"");
-            } catch (Exception e1) {
-                System.err.println("[Error] Issue with writing image.");
-                Logger.logErrorMessage("Issue with writing painting image, likely bad name, name of attempted save is " + name);
-            }
+            saveImage();
         }
 
-
         //Colours ---------------------------
-        setCurrentPaint(brush); //sets the current paint based on the user's click.
+        setCurrentPaint(brush, e); //sets the current paint based on the user's click.
         if ((e.getX() >= 820 && e.getX() <= 870) && (e.getY() >= 70 && e.getY() <= 120) && brush.getShape() != PaintBrush.ERASER) {
             getUserRGB(brush); //popup asking for a custom RGB value.
         }
@@ -278,8 +256,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
     @Override
     public void mouseReleased(MouseEvent e) {
         brush.setDown(false);
-        dynamicMouseX = e.getX();
-        dynamicMouseY = e.getY();
+
         //Clearing -----------------
         if ((e.getX() >= 10 && e.getX() <= 74) && (e.getY() >= 60 && e.getY() <= 124)) { //if user clicks on the clearing X.
             int clearAll = 1; //false
@@ -320,8 +297,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        dynamicMouseX = e.getX();
-        dynamicMouseY = e.getY();
+
         if (e.getY() > 150) {
             b.setColor(brush.getColor());
             repaint();
@@ -394,81 +370,82 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
      * Method to set the current painting colour
      *
      * @param brush the brush from the panel
+     * @param e the MouseEvent from the panel
      */
-    private void setCurrentPaint(PaintBrush brush) {
-        if ((dynamicMouseX >= 500 && dynamicMouseX <= 510) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+    private void setCurrentPaint(PaintBrush brush, MouseEvent e) {
+        if ((e.getX() >= 500 && e.getX() <= 510) && (e.getY() >= 40 && e.getY() <= 50)) {
             brush.setColor(Color.RED);
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to RED.");
-        } else if ((dynamicMouseX >= 515 && dynamicMouseX <= 525) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+        } else if ((e.getX() >= 515 && e.getX() <= 525) && (e.getY() >= 40 && e.getY() <= 50)) {
             brush.setColor(Color.BLUE);
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to BLUE.");
-        } else if ((dynamicMouseX >= 530 && dynamicMouseX <= 540) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+        } else if ((e.getX() >= 530 && e.getX() <= 540) && (e.getY() >= 40 && e.getY() <= 50)) {
             brush.setColor(Color.orange);
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to ORANGE.");
-        } else if ((dynamicMouseX >= 545 && dynamicMouseX <= 555) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+        } else if ((e.getX() >= 545 && e.getX() <= 555) && (e.getY() >= 40 && e.getY() <= 50)) {
             brush.setColor(Color.yellow);
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to YELLOW.");
-        } else if ((dynamicMouseX >= 560 && dynamicMouseX <= 570) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+        } else if ((e.getX() >= 560 && e.getX() <= 570) && (e.getY() >= 40 && e.getY() <= 50)) {
             brush.setColor(Color.green);
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to GREEN.");
-        } else if ((dynamicMouseX >= 575 && dynamicMouseX <= 585) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+        } else if ((e.getX() >= 575 && e.getX() <= 585) && (e.getY() >= 40 && e.getY() <= 50)) {
             brush.setColor(Color.black);
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to BLACK.");
-        } else if ((dynamicMouseX >= 590 && dynamicMouseX <= 600) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+        } else if ((e.getX() >= 590 && e.getX() <= 600) && (e.getY() >= 40 && e.getY() <= 50)) {
             brush.setColor(Color.CYAN);
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to CYAN.");
-        } else if ((dynamicMouseX >= 605 && dynamicMouseX <= 615) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+        } else if ((e.getX() >= 605 && e.getX() <= 615) && (e.getY() >= 40 && e.getY() <= 50)) {
             brush.setColor(Color.pink);
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to PINK.");
-        } else if ((dynamicMouseX >= 620 && dynamicMouseX <= 630) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+        } else if ((e.getX() >= 620 && e.getX() <= 630) && (e.getY() >= 40 && e.getY() <= 50)) {
             brush.setColor(Color.MAGENTA);
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to MAGENTA.");
-        } else if ((dynamicMouseX >= 635 && dynamicMouseX <= 645) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+        } else if ((e.getX() >= 635 && e.getX() <= 645) && (e.getY() >= 40 && e.getY() <= 50)) {
             brush.setColor(new Color(150, 70, 0));
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to BROWN.");
-        } else if ((dynamicMouseX >= 650 && dynamicMouseX <= 660) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+        } else if ((e.getX() >= 650 && e.getX() <= 660) && (e.getY() >= 40 && e.getY() <= 50)) {
             brush.setColor(new Color(0, 0, 100));
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to DARK_BLUE.");
-        } else if ((dynamicMouseX >= 665 && dynamicMouseX <= 675) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+        } else if ((e.getX() >= 665 && e.getX() <= 675) && (e.getY() >= 40 && e.getY() <= 50)) {
             brush.setColor(new Color(100, 100, 0));
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to OLIVE_GREEN.");
-        } else if ((dynamicMouseX >= 680 && dynamicMouseX <= 690) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+        } else if ((e.getX() >= 680 && e.getX() <= 690) && (e.getY() >= 40 && e.getY() <= 50)) {
             brush.setColor(Color.GRAY);
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to GREY.");
-        } else if ((dynamicMouseX >= 695 && dynamicMouseX <= 705) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+        } else if ((e.getX() >= 695 && e.getX() <= 705) && (e.getY() >= 40 && e.getY() <= 50)) {
             brush.setColor(new Color(232, 227, 163));
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to TAN.");
-        } else if ((dynamicMouseX >= 710 && dynamicMouseX <= 720) && (dynamicMouseY >= 40 && dynamicMouseY <= 50)) {
+        } else if ((e.getX() >= 710 && e.getX() <= 720) && (e.getY() >= 40 && e.getY() <= 50)) {
             brush.setColor(new Color(163, 255, 210));
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to LIGHT_GREEN.");
-        } else if ((dynamicMouseX >= 500 && dynamicMouseX <= 510) && (dynamicMouseY >= 60 && dynamicMouseY <= 70)) {
+        } else if ((e.getX() >= 500 && e.getX() <= 510) && (e.getY() >= 60 && e.getY() <= 70)) {
             brush.setColor(new Color(67, 97, 178));
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to NAVY_BLUE");
-        } else if ((dynamicMouseX >= 515 && dynamicMouseX <= 525) && (dynamicMouseY >= 60 && dynamicMouseY <= 70)) {
+        } else if ((e.getX() >= 515 && e.getX() <= 525) && (e.getY() >= 60 && e.getY() <= 70)) {
             brush.setColor(new Color(110, 8, 0));
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to DARK_RED");
-        } else if ((dynamicMouseX >= 500 && dynamicMouseX <= 510) && (dynamicMouseY >= 60 && dynamicMouseY <= 70)) {
+        } else if ((e.getX() >= 500 && e.getX() <= 510) && (e.getY() >= 60 && e.getY() <= 70)) {
             brush.setColor(new Color(197, 232, 255));
             non_eraserColor = brush.getColor();
             Logger.logUserMessage("Set the colour of the brush to BABY_BLUE");
-        } else if ((dynamicMouseX >= 500 && dynamicMouseX <= 610) && (dynamicMouseY >= 100 && dynamicMouseY <= 130)) { //set the drawing colour to a random color.
+        } else if ((e.getX() >= 500 && e.getX() <= 610) && (e.getY() >= 100 && e.getY() <= 130)) { //set the drawing colour to a random color.
             int red = (int) (Math.random() * 255), green = (int) (Math.random() * 255), blue = (int) (Math.random() * 255);
             brush.setColor(new Color(red, green, blue));
             Logger.logUserMessage("Set the colour of the brush to a random colour, [" + red + "," + green + "," + blue + "]");
@@ -500,6 +477,29 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         } catch (Exception e) {
             System.err.println("[Error] Color selector had an issue.");
             Logger.logErrorMessage("Seems the colour selector had an issue. Ending it silently...");
+        }
+    }
+
+    private void saveImage() {
+        String name = JOptionPane.showInputDialog(null, "Provide a name to save your painting as.\nFile name cannot contain: \\ / : * ? \" < > | ");
+        //If name contains illegal characters, set them to underscore.
+        name = name.replace('/', '_'); // /
+        name = name.replace('\"', '_'); // "
+        name = name.replace('?', '_'); // ?
+        name = name.replace('\\', '_'); // \\
+        name = name.replace('*', '_'); // *
+        name = name.replace('<', '_'); // <
+        name = name.replace('>', '_'); // >
+        name = name.replace('|', '_'); // |
+        name = name.replace(':', '_'); // |
+
+        try {
+            ImageIO.write(canvas, "png", new File(name + ".png"));
+            Logger.logUserMessage("Saved the current painting as \"" + name + ".png\"");
+            JOptionPane.showMessageDialog(null, "Saved successfully.");
+        } catch (Exception e1) {
+            System.err.println("[Error] Issue with writing image.");
+            Logger.logErrorMessage("Issue with writing painting image, likely bad name, name of attempted save is " + name);
         }
     }
 }
