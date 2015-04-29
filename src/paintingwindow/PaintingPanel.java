@@ -27,6 +27,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
     Graphics b; //graphics instance used for painting to the canvas
     int dynamicMouseX = 0, dynamicMouseY = 0; //middleman variables to get the current mouse location.
 
+
     public PaintingPanel() {
         Logger.logCodeMessage("Setting size of window to 900x1000");
         setSize(1000, 1000); //set size to 1000x1000 pixels
@@ -193,13 +194,17 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
 
         //image saving ----------------
         if ((e.getX() >= 680 && e.getX() <= 752) && (e.getY() >= 80 && e.getY() <= 152)) {
-            String name = JOptionPane.showInputDialog(null, "Provide a name to save your painting as.\nFile name cannot contain: / or ' or \" or ? or \\");
+            String name = JOptionPane.showInputDialog(null, "Provide a name to save your painting as.\nFile name cannot contain: \\ / : * ? \" < > | ");
             //If name contains illegal characters, set them to underscore.
             name = name.replace('/', '_'); // /
-            name = name.replace('\'', '_'); // '
             name = name.replace('\"', '_'); // "
             name = name.replace('?', '_'); // ?
             name = name.replace('\\', '_'); // \\
+            name = name.replace('*', '_'); // *
+            name = name.replace('<', '_'); // <
+            name = name.replace('>', '_'); // >
+            name = name.replace('|', '_'); // |
+            name = name.replace(':', '_'); // |
 
             try {
                 ImageIO.write(canvas, "png", new File(name + ".png"));
