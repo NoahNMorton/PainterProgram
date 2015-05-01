@@ -25,6 +25,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
     Image circle, paintBucket, square, xMark, small, medium, big, huge, eraser, floppyDisk;
     BufferedImage canvas;
     Graphics b; //graphics instance used for painting to the canvas
+    int oldX = -1, oldY = -1;
 
 
     public PaintingPanel() {
@@ -153,6 +154,11 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
     @Override
     public void mousePressed(MouseEvent e) {
         brush.setDown(true);
+        if (oldX == -1 && oldY == -1) {
+            oldX = e.getX();
+            oldY = e.getY();
+        }
+
 
         //Shapes---------------------------
         /*if ((e.getX() >= 150 && e.getX() <= 150 + 64) && (e.getY() >= 30 && e.getY() <= 30 + 64)) { //if user clicks on the paint bucket option
