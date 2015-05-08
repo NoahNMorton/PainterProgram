@@ -27,7 +27,6 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
     Graphics b; //graphics instance used for painting to the canvas
     int oldX = -1, oldY = -1;
 
-
     public PaintingPanel() {
         Logger.logCodeMessage("Setting size of window to 900x1000");
         setSize(1000, 1000); //set size to 1000x1000 pixels
