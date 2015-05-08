@@ -154,7 +154,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         brush.setDown(true);
         if (oldX == -1 && oldY == -1) {
             oldX = e.getX();
-            oldY = e.getY();
+            oldY = e.getY() - 150;
         }
 
 
@@ -205,7 +205,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         }
 
         //Paint--------------------
-        b.setColor(brush.getColor()); //sets the painting colour to the current colour of the brush
+        /*b.setColor(brush.getColor()); //sets the painting colour to the current colour of the brush
         if (e.getY() > 150) {
             repaint();
             if (brush.getShape() == PaintBrush.CIRCLE && brush.isDown()) {
@@ -254,13 +254,14 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
                         break;
                 }
             }
-        }
+        }*/
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         brush.setDown(false);
-
+        oldX = -1;
+        oldY = -1;
         //Clearing -----------------
         if ((e.getX() >= 10 && e.getX() <= 74) && (e.getY() >= 60 && e.getY() <= 124)) { //if user clicks on the clearing X.
             int clearAll = 1; //false
@@ -301,8 +302,13 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
-        if (e.getY() > 150) {
+        if (oldX != -1 && oldY != -1) {
+            b.setColor(brush.getColor());
+            b.drawLine(oldX, oldY, e.getX(), e.getY() - 150);
+            oldX = e.getX();
+            oldY = e.getY() - 150;
+        }
+        /*if (e.getY() > 150) {
             b.setColor(brush.getColor());
             repaint();
             if (brush.getShape() == PaintBrush.CIRCLE && brush.isDown()) { //circle brush
@@ -351,7 +357,7 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
                         break;
                 }
             }
-        }
+        }*/
         repaint();
     }
 
