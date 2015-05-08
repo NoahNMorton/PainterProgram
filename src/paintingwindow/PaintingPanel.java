@@ -66,7 +66,6 @@ public class PaintingPanel extends JPanel implements MouseMotionListener, MouseL
         g.fillRect(0, 0, getWidth(), 150);
         g.setColor(Color.BLACK);
         g.drawString("Painter Program", 10, 20);
-
         //draw all brush choices to the screen --------------
         g.drawString("Brushes:", 150, 20);
         //g.drawImage(paintBucket, 150, 30, null); //temporarily deactivated until I can implement filling
